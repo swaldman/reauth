@@ -19,7 +19,7 @@ object `package` extends ScalaModule with SonatypeCentralPublishModule:
       description = "A tiny library for managing bcrypt authentication that supports cost-factor and version changes.",
       organization = "com.mchange",
       url = "https://github.com/swaldman/mill-daemon",
-      licenses = Seq(License.MIT),
+      licenses = Seq(License.`Apache-2.0`),
       versionControl = VersionControl.github("swaldman", "mill-daemon"),
       developers = Seq(
         Developer("swaldman", "Steve Waldman", "https://github.com/swaldman")
