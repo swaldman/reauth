@@ -9,12 +9,12 @@ object BCryptHash:
 opaque type BCryptHash = Array[Char]
 
 extension( bchash : BCryptHash )
-  @targetName("bcryptHashUnsafeInternalArray") private[reauth] inline def unsafeInternalArray : Array[Char] = bchash
+  @targetName("bcryptHashUnsafeInternalArray") inline def unsafeInternalArray : Array[Char] = bchash
 
 object Password:
   inline def apply( s : String ) : Password = s
 opaque type Password = String
 
 extension( password : Password )
-  @targetName("passwordToString") private[reauth] inline def str : String = password
+  @targetName("passwordToString") inline def str : String = password
   
