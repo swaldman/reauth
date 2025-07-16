@@ -1,0 +1,32 @@
+//| mill-version: 1.0.0
+//| mill-jvm-version: 17
+//+---------------------
+
+package build
+
+import mill.*, scalalib.*, publish.*
+
+object `package` extends ScalaModule with SonatypeCentralPublishModule:
+
+  override def scalaVersion = "3.3.6"
+
+  override def publishVersion = "0.0.1-SNAPSHOT"
+
+  override def artifactName = "reauth"
+
+  override def pomSettings =
+    PomSettings(
+      description = "A tiny library for managing bcrypt authentication that supports cost-factor and version changes.",
+      organization = "com.mchange",
+      url = "https://github.com/swaldman/mill-daemon",
+      licenses = Seq(License.MIT),
+      versionControl = VersionControl.github("swaldman", "mill-daemon"),
+      developers = Seq(
+        Developer("swaldman", "Steve Waldman", "https://github.com/swaldman")
+      )
+    )
+
+  
+  def mvnDeps = Seq(
+    mvn"at.favre.lib:bcrypt:0.10.2"
+  )
