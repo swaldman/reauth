@@ -20,7 +20,11 @@ object AuthManager:
     def apply( bch : BCryptHash ) : Spec = Spec( version( bch ), costFactor( bch ) )
   case class Spec( version : Authenticator.BCryptVersion, costFactor : Int )
 
-class AuthManager[UID]( val currentSpec : AuthManager.Spec, val longPasswordStrategyForSpec : Map[AuthManager.Spec, Authenticator.LongPasswordStrategy], entropy : java.security.SecureRandom ):
+class AuthManager[UID](
+  currentSpec : AuthManager.Spec,
+  longPasswordStrategyForCurrentOrHistoricalSpec : Map[AuthManager.Spec, Authenticator.LongPasswordStrategy],
+  entropy : java.security.SecureRandom
+):
 
   val currentAuthenticator =
     val AuthenticatorWithStatus( am, isCurrent ) = AuthenticatorWithStatus.forSpec( currentSpec )
@@ -32,7 +36,7 @@ class AuthManager[UID]( val currentSpec : AuthManager.Spec, val longPasswordStra
     private val memoized : mutable.HashMap[AuthManager.Spec,AuthenticatorWithStatus] = new mutable.HashMap()
 
     def forSpec( spec : AuthManager.Spec ) : AuthenticatorWithStatus =
-      val lps = longPasswordStrategyForSpec.getOrElse( spec, throw new UnexpectedBCryptHashSpec("This application has never supported bcrypt hashes of type " + spec) )
+      val lps = longPasswordStrategyForCurrentOrHistoricalSpec.getOrElse( spec, throw new UnexpectedBCryptHashSpec("This application has never supported bcrypt hashes of type " + spec) )
       this.synchronized:
         memoized.getOrElseUpdate( spec, new AuthenticatorWithStatus( new Authenticator( spec.costFactor, spec.version, lps, entropy ), spec == currentSpec ) )
 

@@ -25,7 +25,6 @@ object `package` extends ScalaModule with SonatypeCentralPublishModule:
         Developer("swaldman", "Steve Waldman", "https://github.com/swaldman")
       )
     )
-
   
   def mvnDeps = Seq(
     mvn"at.favre.lib:bcrypt:0.10.2"
