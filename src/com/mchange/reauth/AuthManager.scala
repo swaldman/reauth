@@ -44,7 +44,7 @@ class AuthManager[UID](
       forSpec( AuthManager.Spec(hash) )
   case class AuthenticatorWithStatus( authManager : Authenticator, isCurrent : Boolean )
 
-  def initialNewPasswordHash( pid : UID, password : Password ) : Unit =
+  def initialNewPasswordHash( pid : UID, password : Password ) : BCryptHash =
     currentAuthenticator.hashForPassword(password)
 
   def overwriteNewPassword( pid : UID, password : Password, storeHash : (UID, BCryptHash) => Unit ) : Unit =
