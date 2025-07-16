@@ -44,16 +44,16 @@ class AuthManager[UID](
       forSpec( AuthManager.Spec(hash) )
   case class AuthenticatorWithStatus( authManager : Authenticator, isCurrent : Boolean )
 
-  def initialNewPasswordHash( pid : UID, password : Password ) : BCryptHash =
+  def initialPasswordHash( uid : UID, password : Password ) : BCryptHash =
     currentAuthenticator.hashForPassword(password)
 
-  def overwriteNewPassword( pid : UID, password : Password, storeHash : (UID, BCryptHash) => Unit ) : Unit =
+  def overwriteNewPassword( uid : UID, password : Password, storeHash : (UID, BCryptHash) => Unit ) : Unit =
     val bchash = currentAuthenticator.hashForPassword(password)
-    storeHash( pid, bchash )
+    storeHash( uid, bchash )
 
-  def verifyRehash( pid : UID, password : Password, fetchHash : UID => BCryptHash, storeHash : (UID, BCryptHash) => Unit ) : Boolean =
-    val hash = fetchHash( pid )
+  def verifyRehash( uid : UID, password : Password, fetchHash : UID => BCryptHash, storeHash : (UID, BCryptHash) => Unit ) : Boolean =
+    val hash = fetchHash( uid )
     val amws = AuthenticatorWithStatus.forHash(hash)
     val out = amws.authManager.verifyPassword( password, hash )
-    if !amws.isCurrent then storeHash( pid, currentAuthenticator.hashForPassword( password ) )
+    if !amws.isCurrent then storeHash( uid, currentAuthenticator.hashForPassword( password ) )
     out
