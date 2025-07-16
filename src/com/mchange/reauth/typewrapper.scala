@@ -3,7 +3,7 @@ package com.mchange.reauth
 import scala.annotation.targetName
 
 object BCryptHash:
-  private[reauth] def apply( chars : Array[Char] ) : BCryptHash = // don't inline with require
+  def apply( chars : Array[Char] ) : BCryptHash = // don't inline with require
     require( chars.length == 60, "A BCrypt salted hash must contain precisely 60 characters, provided hash contains " + chars.length )
     chars
 opaque type BCryptHash = Array[Char]
