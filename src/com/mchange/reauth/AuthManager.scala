@@ -4,7 +4,7 @@ import java.security.SecureRandom
 import scala.collection.{immutable,mutable}
 
 object AuthManager:
-  
+
   def costFactor( bch : BCryptHash ) : Int =
     val hashArr = bch.unsafeInternalArray
     val intChars = Array( hashArr(4), hashArr(5) ) // two character human-readable cost factor in bcrypt hashes
@@ -51,9 +51,13 @@ class AuthManager[UID](
     val bchash = currentAuthenticator.hashForPassword(password)
     storeHash( uid, bchash )
 
-  def verifyRehash( uid : UID, password : Password, fetchHash : UID => BCryptHash, storeHash : (UID, BCryptHash) => Unit ) : Boolean =
-    val hash = fetchHash( uid )
-    val amws = AuthenticatorWithStatus.forHash(hash)
-    val out = amws.authManager.verifyPassword( password, hash )
-    if !amws.isCurrent then storeHash( uid, currentAuthenticator.hashForPassword( password ) )
-    out
+  def verifyRehash( uid : UID, password : Password, fetchHash : UID => Option[BCryptHash], storeHash : (UID, BCryptHash) => Unit ) : VerificationResult =
+    import VerificationResult.*
+    fetchHash( uid ) match
+      case Some( hash ) =>
+        val amws = AuthenticatorWithStatus.forHash(hash)
+        val out = amws.authManager.verifyPassword( password, hash )
+        if !amws.isCurrent then storeHash( uid, currentAuthenticator.hashForPassword( password ) )
+        if out then OK else WrongPassword
+      case None =>
+        UserNotFound
