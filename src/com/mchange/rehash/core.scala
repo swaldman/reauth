@@ -1,4 +1,4 @@
-package com.mchange.reauth
+package com.mchange.rehash
 
 enum VerificationResult:
   case OK, WrongPassword, UserNotFound

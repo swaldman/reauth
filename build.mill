@@ -12,7 +12,7 @@ object `package` extends ScalaModule with SonatypeCentralPublishModule:
 
   override def publishVersion = "0.0.1-SNAPSHOT"
 
-  override def artifactName = "reauth"
+  override def artifactName = "rehash"
 
   override def pomSettings =
     PomSettings(

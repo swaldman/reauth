@@ -1,4 +1,4 @@
-package com.mchange.reauth
+package com.mchange.rehash
 
 class ReauthException( message : String, cause : Throwable = null ) extends Exception( message, cause )
 
